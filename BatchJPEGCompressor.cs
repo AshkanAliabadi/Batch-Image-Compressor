@@ -3,6 +3,9 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace BatchJPEGCompressor
@@ -21,77 +24,82 @@ namespace BatchJPEGCompressor
         {
             this.InputTextBox = new System.Windows.Forms.TextBox();
             this.OutputTextBox = new System.Windows.Forms.TextBox();
-            this.ResolutionTextBox = new System.Windows.Forms.TextBox();
+            this.ResolutionPercentTextBox = new System.Windows.Forms.TextBox();
             this.QualityTextBox = new System.Windows.Forms.TextBox();
             this.InputBrowseButton = new System.Windows.Forms.Button();
             this.CompressButton = new System.Windows.Forms.Button();
             this.OutputBrowseButton = new System.Windows.Forms.Button();
             this.InputLabel = new System.Windows.Forms.Label();
             this.OutputLabel = new System.Windows.Forms.Label();
-            this.ResolutionLabel = new System.Windows.Forms.Label();
             this.QualityLabel = new System.Windows.Forms.Label();
             this.InputBrowseDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.OutputBrowseDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.ResolutionGroupBox = new System.Windows.Forms.GroupBox();
+            this.ResolutionDimensionTextBox = new System.Windows.Forms.TextBox();
+            this.ResolutionDimensionRadioButton = new System.Windows.Forms.RadioButton();
+            this.ResolutionPercentRadioButton = new System.Windows.Forms.RadioButton();
+            this.ResolutionGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // InputTextBox
             // 
-            this.InputTextBox.Location = new System.Drawing.Point( 67, 6 );
+            this.InputTextBox.Location = new System.Drawing.Point( 60, 6 );
             this.InputTextBox.Name = "InputTextBox";
             this.InputTextBox.ReadOnly = true;
-            this.InputTextBox.Size = new System.Drawing.Size( 200, 20 );
-            this.InputTextBox.TabIndex = 0;
+            this.InputTextBox.Size = new System.Drawing.Size( 296, 20 );
+            this.InputTextBox.TabIndex = 1;
             // 
             // OutputTextBox
             // 
-            this.OutputTextBox.Location = new System.Drawing.Point( 67, 32 );
+            this.OutputTextBox.Location = new System.Drawing.Point( 60, 32 );
             this.OutputTextBox.Name = "OutputTextBox";
             this.OutputTextBox.ReadOnly = true;
-            this.OutputTextBox.Size = new System.Drawing.Size( 200, 20 );
-            this.OutputTextBox.TabIndex = 1;
+            this.OutputTextBox.Size = new System.Drawing.Size( 296, 20 );
+            this.OutputTextBox.TabIndex = 3;
             // 
-            // ResolutionTextBox
+            // ResolutionPercentTextBox
             // 
-            this.ResolutionTextBox.Location = new System.Drawing.Point( 67, 58 );
-            this.ResolutionTextBox.MaxLength = 3;
-            this.ResolutionTextBox.Name = "ResolutionTextBox";
-            this.ResolutionTextBox.Size = new System.Drawing.Size( 70, 20 );
-            this.ResolutionTextBox.TabIndex = 2;
+            this.ResolutionPercentTextBox.Enabled = false;
+            this.ResolutionPercentTextBox.Location = new System.Drawing.Point( 94, 46 );
+            this.ResolutionPercentTextBox.MaxLength = 3;
+            this.ResolutionPercentTextBox.Name = "ResolutionPercentTextBox";
+            this.ResolutionPercentTextBox.Size = new System.Drawing.Size( 70, 20 );
+            this.ResolutionPercentTextBox.TabIndex = 2;
             // 
             // QualityTextBox
             // 
-            this.QualityTextBox.Location = new System.Drawing.Point( 197, 58 );
+            this.QualityTextBox.Location = new System.Drawing.Point( 286, 76 );
             this.QualityTextBox.MaxLength = 3;
             this.QualityTextBox.Name = "QualityTextBox";
             this.QualityTextBox.Size = new System.Drawing.Size( 70, 20 );
-            this.QualityTextBox.TabIndex = 3;
+            this.QualityTextBox.TabIndex = 6;
             // 
             // InputBrowseButton
             // 
-            this.InputBrowseButton.Location = new System.Drawing.Point( 273, 6 );
+            this.InputBrowseButton.Location = new System.Drawing.Point( 362, 4 );
             this.InputBrowseButton.Name = "InputBrowseButton";
             this.InputBrowseButton.Size = new System.Drawing.Size( 75, 23 );
-            this.InputBrowseButton.TabIndex = 4;
+            this.InputBrowseButton.TabIndex = 2;
             this.InputBrowseButton.Text = "Browse";
             this.InputBrowseButton.UseVisualStyleBackColor = true;
             this.InputBrowseButton.Click += new System.EventHandler( this.InputBrowseButton_Click );
             // 
             // CompressButton
             // 
-            this.CompressButton.Location = new System.Drawing.Point( 12, 97 );
+            this.CompressButton.Location = new System.Drawing.Point( 12, 140 );
             this.CompressButton.Name = "CompressButton";
-            this.CompressButton.Size = new System.Drawing.Size( 336, 23 );
-            this.CompressButton.TabIndex = 5;
+            this.CompressButton.Size = new System.Drawing.Size( 425, 23 );
+            this.CompressButton.TabIndex = 7;
             this.CompressButton.Text = "Compress";
             this.CompressButton.UseVisualStyleBackColor = true;
             this.CompressButton.Click += new System.EventHandler( this.CompressButton_Click );
             // 
             // OutputBrowseButton
             // 
-            this.OutputBrowseButton.Location = new System.Drawing.Point( 273, 30 );
+            this.OutputBrowseButton.Location = new System.Drawing.Point( 362, 30 );
             this.OutputBrowseButton.Name = "OutputBrowseButton";
             this.OutputBrowseButton.Size = new System.Drawing.Size( 75, 23 );
-            this.OutputBrowseButton.TabIndex = 7;
+            this.OutputBrowseButton.TabIndex = 4;
             this.OutputBrowseButton.Text = "Browse";
             this.OutputBrowseButton.UseVisualStyleBackColor = true;
             this.OutputBrowseButton.Click += new System.EventHandler( this.OutputBrowseButton_Click );
@@ -99,58 +107,95 @@ namespace BatchJPEGCompressor
             // InputLabel
             // 
             this.InputLabel.AutoSize = true;
-            this.InputLabel.Location = new System.Drawing.Point( 27, 9 );
+            this.InputLabel.Location = new System.Drawing.Point( 20, 9 );
             this.InputLabel.Name = "InputLabel";
             this.InputLabel.Size = new System.Drawing.Size( 34, 13 );
-            this.InputLabel.TabIndex = 8;
+            this.InputLabel.TabIndex = 0;
             this.InputLabel.Text = "Input:";
             // 
             // OutputLabel
             // 
             this.OutputLabel.AutoSize = true;
-            this.OutputLabel.Location = new System.Drawing.Point( 19, 35 );
+            this.OutputLabel.Location = new System.Drawing.Point( 12, 35 );
             this.OutputLabel.Name = "OutputLabel";
             this.OutputLabel.Size = new System.Drawing.Size( 42, 13 );
-            this.OutputLabel.TabIndex = 9;
+            this.OutputLabel.TabIndex = 0;
             this.OutputLabel.Text = "Output:";
-            // 
-            // ResolutionLabel
-            // 
-            this.ResolutionLabel.AutoSize = true;
-            this.ResolutionLabel.Location = new System.Drawing.Point( 1, 61 );
-            this.ResolutionLabel.Name = "ResolutionLabel";
-            this.ResolutionLabel.Size = new System.Drawing.Size( 60, 13 );
-            this.ResolutionLabel.TabIndex = 11;
-            this.ResolutionLabel.Text = "Resolution:";
             // 
             // QualityLabel
             // 
             this.QualityLabel.AutoSize = true;
-            this.QualityLabel.Location = new System.Drawing.Point( 149, 61 );
+            this.QualityLabel.Location = new System.Drawing.Point( 238, 79 );
             this.QualityLabel.Name = "QualityLabel";
             this.QualityLabel.Size = new System.Drawing.Size( 42, 13 );
-            this.QualityLabel.TabIndex = 13;
+            this.QualityLabel.TabIndex = 0;
             this.QualityLabel.Text = "Quality:";
+            // 
+            // ResolutionGroupBox
+            // 
+            this.ResolutionGroupBox.Controls.Add( this.ResolutionDimensionTextBox );
+            this.ResolutionGroupBox.Controls.Add( this.ResolutionDimensionRadioButton );
+            this.ResolutionGroupBox.Controls.Add( this.ResolutionPercentRadioButton );
+            this.ResolutionGroupBox.Controls.Add( this.ResolutionPercentTextBox );
+            this.ResolutionGroupBox.Location = new System.Drawing.Point( 60, 58 );
+            this.ResolutionGroupBox.Name = "ResolutionGroupBox";
+            this.ResolutionGroupBox.Size = new System.Drawing.Size( 170, 72 );
+            this.ResolutionGroupBox.TabIndex = 5;
+            this.ResolutionGroupBox.TabStop = false;
+            this.ResolutionGroupBox.Text = "Resolution";
+            // 
+            // ResolutionDimensionTextBox
+            // 
+            this.ResolutionDimensionTextBox.Location = new System.Drawing.Point( 94, 18 );
+            this.ResolutionDimensionTextBox.MaxLength = 4;
+            this.ResolutionDimensionTextBox.Name = "ResolutionDimensionTextBox";
+            this.ResolutionDimensionTextBox.Size = new System.Drawing.Size( 70, 20 );
+            this.ResolutionDimensionTextBox.TabIndex = 4;
+            // 
+            // ResolutionDimensionRadioButton
+            // 
+            this.ResolutionDimensionRadioButton.AutoSize = true;
+            this.ResolutionDimensionRadioButton.Checked = true;
+            this.ResolutionDimensionRadioButton.Location = new System.Drawing.Point( 11, 19 );
+            this.ResolutionDimensionRadioButton.Name = "ResolutionDimensionRadioButton";
+            this.ResolutionDimensionRadioButton.Size = new System.Drawing.Size( 77, 17 );
+            this.ResolutionDimensionRadioButton.TabIndex = 3;
+            this.ResolutionDimensionRadioButton.TabStop = true;
+            this.ResolutionDimensionRadioButton.Text = "Dimension:";
+            this.ResolutionDimensionRadioButton.UseVisualStyleBackColor = true;
+            this.ResolutionDimensionRadioButton.CheckedChanged += new System.EventHandler( this.ResolutionDimensionRadioButton_CheckedChanged );
+            // 
+            // ResolutionPercentRadioButton
+            // 
+            this.ResolutionPercentRadioButton.AutoSize = true;
+            this.ResolutionPercentRadioButton.Location = new System.Drawing.Point( 11, 47 );
+            this.ResolutionPercentRadioButton.Name = "ResolutionPercentRadioButton";
+            this.ResolutionPercentRadioButton.Size = new System.Drawing.Size( 65, 17 );
+            this.ResolutionPercentRadioButton.TabIndex = 1;
+            this.ResolutionPercentRadioButton.Text = "Percent:";
+            this.ResolutionPercentRadioButton.UseVisualStyleBackColor = true;
+            this.ResolutionPercentRadioButton.CheckedChanged += new System.EventHandler( this.ResolutionPercentRadioButton_CheckedChanged );
             // 
             // BatchJPEGCompressor
             // 
-            this.ClientSize = new System.Drawing.Size( 361, 132 );
-            this.Controls.Add( this.QualityLabel );
-            this.Controls.Add( this.ResolutionLabel );
-            this.Controls.Add( this.OutputLabel );
+            this.ClientSize = new System.Drawing.Size( 449, 175 );
             this.Controls.Add( this.InputLabel );
-            this.Controls.Add( this.OutputBrowseButton );
-            this.Controls.Add( this.CompressButton );
-            this.Controls.Add( this.InputBrowseButton );
-            this.Controls.Add( this.QualityTextBox );
-            this.Controls.Add( this.ResolutionTextBox );
-            this.Controls.Add( this.OutputTextBox );
             this.Controls.Add( this.InputTextBox );
+            this.Controls.Add( this.InputBrowseButton );
+            this.Controls.Add( this.OutputLabel );
+            this.Controls.Add( this.OutputTextBox );
+            this.Controls.Add( this.OutputBrowseButton );
+            this.Controls.Add( this.ResolutionGroupBox );
+            this.Controls.Add( this.QualityLabel );
+            this.Controls.Add( this.QualityTextBox );
+            this.Controls.Add( this.CompressButton );
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "BatchJPEGCompressor";
-            this.Text = "Batch Image Compressor";
+            this.Text = "Batch JPEG Compressor";
             this.Load += new System.EventHandler( this.BatchImageCompressorForm_Load );
+            this.ResolutionGroupBox.ResumeLayout( false );
+            this.ResolutionGroupBox.PerformLayout();
             this.ResumeLayout( false );
             this.PerformLayout();
 
@@ -158,9 +203,8 @@ namespace BatchJPEGCompressor
 
         private void BatchImageCompressorForm_Load( object sender, EventArgs e )
         {
-            mImageCodecInfo = GetEncoderInfo( "image/jpeg" );
-            mEncoderParameters = new EncoderParameters();
-            ResolutionTextBox.Text = msDefaultResolution.ToString();
+            ResolutionDimensionTextBox.Text = msDefaultResolutionDimension.ToString();
+            ResolutionPercentTextBox.Text = msDefaultResolutionPercent.ToString();
             QualityTextBox.Text = msDefaultQuality.ToString();
         }
 
@@ -180,6 +224,18 @@ namespace BatchJPEGCompressor
             }
         }
 
+        private void ResolutionDimensionRadioButton_CheckedChanged( object sender, EventArgs e )
+        {
+            ResolutionDimensionTextBox.Enabled = true;
+            ResolutionPercentTextBox.Enabled = false;
+        }
+
+        private void ResolutionPercentRadioButton_CheckedChanged( object sender, EventArgs e )
+        {
+            ResolutionDimensionTextBox.Enabled = false;
+            ResolutionPercentTextBox.Enabled = true;
+        }
+
         private void CompressButton_Click( object sender, EventArgs e )
         {
             String parameterValidationResult = ValidateParameters();
@@ -188,7 +244,7 @@ namespace BatchJPEGCompressor
                 MessageBox.Show(
                     this,
                     parameterValidationResult,
-                    "Batch Image Compressor",
+                    "Batch JPEG Compressor",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error
                 );
@@ -202,8 +258,15 @@ namespace BatchJPEGCompressor
                 CompressButton.Enabled = false;
                 Compress( InputTextBox.Text, OutputTextBox.Text );
             }
-            catch ( Exception )
+            catch ( Exception ex )
             {
+                MessageBox.Show(
+                   this,
+                   ex.ToString(),
+                   "Batch JPEG Compressor",
+                   MessageBoxButtons.OK,
+                   MessageBoxIcon.Error
+               );
             }
             finally
             {
@@ -216,38 +279,47 @@ namespace BatchJPEGCompressor
         {
             if ( String.IsNullOrEmpty( InputTextBox.Text ) )
             {
-                return "Input directory cannot be empty.";
+                return "Invalid input directory!";
             }
 
             if ( String.IsNullOrEmpty( OutputTextBox.Text ) )
             {
-                return "Output directory cannot be empty.";
+                return "Invalid output directory!";
             }
 
             if ( Directory.EnumerateFileSystemEntries( OutputTextBox.Text ).GetEnumerator().MoveNext() )
             {
-                return "Output directory must be empty.";
+                return "To avoid overriding existing files, output directory is required to be empty.";
             }
 
-            if ( String.IsNullOrEmpty( ResolutionTextBox.Text ) )
-            {
-                return "Resolution cannot be empty!";
-            }
-
-            bool invalidResolution = false;
+            string invalidResolutionMessage = null;
             try
             {
-                int resolution = System.Convert.ToInt32( ResolutionTextBox.Text );
-                invalidResolution = resolution < 1 || resolution > 100;
+                if ( ResolutionDimensionRadioButton.Enabled )
+                {
+                    int resolution = System.Convert.ToInt32( ResolutionDimensionTextBox.Text );
+                    if ( resolution < 1 || resolution > 9999 )
+                    {
+                        invalidResolutionMessage = "Resolution dimension must be an integer in the range [1, 9999]";
+                    }
+                }
+
+                if ( ResolutionPercentRadioButton.Enabled )
+                {
+                    int resolution = System.Convert.ToInt32( ResolutionPercentTextBox.Text );
+                    if ( resolution < 1 || resolution > 100 )
+                    {
+                        invalidResolutionMessage = "Resolution percentage must be an integer in the range [1, 100]";
+                    }
+                }
             }
             catch ( Exception )
             {
-                invalidResolution = true;
             }
 
-            if ( invalidResolution )
+            if ( !string.IsNullOrEmpty( invalidResolutionMessage ) )
             {
-                return "Resolution must be an integer in the range [1, 100].";
+                return invalidResolutionMessage;
             }
 
             bool invalidQuality = false;
@@ -271,33 +343,117 @@ namespace BatchJPEGCompressor
 
         private void Compress( string inputDirectory, string outputDirectory )
         {
-            System.Drawing.Imaging.Encoder encoder = System.Drawing.Imaging.Encoder.Quality;
-            mEncoderParameters.Param[0] = new EncoderParameter( encoder, System.Convert.ToInt32( QualityTextBox.Text ) );
+            ImageCodecInfo imageCodecInfo = GetEncoderInfo( "image/jpeg" );
 
+            EncoderParameters encoderParameters = new EncoderParameters();
+            System.Drawing.Imaging.Encoder encoder = System.Drawing.Imaging.Encoder.Quality;
+            encoderParameters.Param[0] = new EncoderParameter( encoder, System.Convert.ToInt32( QualityTextBox.Text ) );
+
+            CompressDirectory( imageCodecInfo, encoderParameters, inputDirectory, outputDirectory );
+        }
+
+        private void CompressDirectory( ImageCodecInfo imageCodecInfo, EncoderParameters encoderParameters, string inputDirectory, string outputDirectory )
+        {
             string[] imageFiles = Directory.GetFiles( inputDirectory );
-            foreach ( string imageFile in imageFiles )
+            Parallel.ForEach(
+                imageFiles,
+                imageFile => CompressFile( imageCodecInfo, encoderParameters, imageFile, outputDirectory )
+            );
+
+            string[] directories = Directory.GetDirectories( inputDirectory );
+            foreach ( string directory in directories )
             {
-                String extension = Path.GetExtension( imageFile );
-                if ( !String.IsNullOrEmpty( extension ) && extension.ToLower().Equals( ".jpg" ) )
+                CompressDirectory( imageCodecInfo, encoderParameters, directory, outputDirectory );
+            }
+        }
+
+        private void CompressFile( ImageCodecInfo imageCodecInfo, EncoderParameters encoderParameters, string imageFile, string outputDirectory )
+        {
+            String extension = Path.GetExtension( imageFile ).ToLower();
+            if ( String.IsNullOrEmpty( extension ) || !extension.Equals( ".jpg" ) )
+            {
+                return;
+            }
+
+            using ( Image inImage = Image.FromFile( imageFile ) )
+            {
+                int width = inImage.Width;
+                int height = inImage.Height;
+                AdjustResolution( ref width, ref height );
+
+                using ( Bitmap outImage = new Bitmap( width, height, PixelFormat.Format24bppRgb ) )
                 {
-                    using ( Image inImage = Image.FromFile( imageFile ) )
+                    foreach ( PropertyItem propertyItem in inImage.PropertyItems )
                     {
-                        float quality = System.Convert.ToSingle( ResolutionTextBox.Text ) / 100.0f;
-                        using ( Bitmap outImage = new Bitmap( (int)( inImage.Width * quality ), (int)( inImage.Height * quality ), PixelFormat.Format24bppRgb ) )
-                        {
-                            outImage.SetResolution( 72, 72 );
-                            using ( Graphics graphics = Graphics.FromImage( outImage ) )
-                            {
-                                graphics.SmoothingMode = SmoothingMode.HighQuality;
-                                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                                graphics.DrawImage( inImage, new Rectangle( 0, 0, outImage.Width, outImage.Height ), 0, 0, inImage.Width, inImage.Height, GraphicsUnit.Pixel );
-                                outImage.Save( Path.Combine( outputDirectory, Path.GetFileName( imageFile ) ), mImageCodecInfo, mEncoderParameters );
-                            }
-                        }
+                        outImage.SetPropertyItem( propertyItem );
+                    }
+
+                    float xdpi = BitConverter.ToInt32( inImage.GetPropertyItem( 0x011A ).Value, 0 );
+                    float ydpi = BitConverter.ToInt32( inImage.GetPropertyItem( 0x011B ).Value, 0 );
+                    outImage.SetResolution( xdpi, ydpi );
+
+                    using ( Graphics graphics = Graphics.FromImage( outImage ) )
+                    {
+                        graphics.SmoothingMode = SmoothingMode.HighQuality;
+                        graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                        graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                        graphics.DrawImage(
+                            inImage,
+                            new Rectangle(
+                                0, 0,
+                                outImage.Width, outImage.Height
+                            ),
+                            0, 0,
+                            inImage.Width, inImage.Height,
+                            GraphicsUnit.Pixel
+                        );
+
+                        string dateTime = Encoding.UTF8.GetString( inImage.GetPropertyItem( 0x0132 ).Value );
+                        string filename = RemoveInvalidCharacters( dateTime.Replace( ':', '-' ) ) + extension;
+                        outImage.Save( Path.Combine( outputDirectory, filename ), imageCodecInfo, encoderParameters );
                     }
                 }
             }
+        }
+
+        private void AdjustResolution( ref int width, ref int height )
+        {
+            if ( ResolutionDimensionTextBox.Enabled )
+            {
+                float shortEdge = Math.Min( width, height );
+                float longEdge = Math.Max( width, height );
+
+                float dimension = System.Convert.ToSingle( ResolutionDimensionTextBox.Text );
+                if ( dimension < longEdge )
+                {
+                    shortEdge *= ( dimension / longEdge );
+                    longEdge = dimension;
+
+                    if ( width < height )
+                    {
+                        width = ( int ) shortEdge;
+                        height = ( int ) longEdge;
+                    }
+                    else
+                    {
+                        width = ( int ) longEdge;
+                        height = ( int ) shortEdge;
+                    }
+                }
+            }
+            else if ( ResolutionPercentTextBox.Enabled )
+            {
+                float factor = System.Convert.ToSingle( ResolutionPercentTextBox.Text ) / 100.0f;
+                width = ( int ) ( width * factor );
+                height = ( int ) ( height * factor );
+            }
+        }
+
+        private static string RemoveInvalidCharacters( string filename )
+        {
+            char[] invalidCharacters = Path.GetInvalidFileNameChars();
+            return Regex.Replace( filename, "[" + Regex.Escape( new string( invalidCharacters ) ) + "]", String.Empty );
         }
 
         private static ImageCodecInfo GetEncoderInfo( String mimeType )
@@ -315,23 +471,25 @@ namespace BatchJPEGCompressor
         #endregion
 
         #region Private Members
-        private static int msDefaultResolution = 65;
+        private static int msDefaultResolutionDimension = 1400;
+        private static int msDefaultResolutionPercent = 65;
         private static int msDefaultQuality = 85;
-        private ImageCodecInfo mImageCodecInfo;
         private TextBox InputTextBox;
         private TextBox OutputTextBox;
-        private TextBox ResolutionTextBox;
+        private TextBox ResolutionPercentTextBox;
         private TextBox QualityTextBox;
         private Button InputBrowseButton;
         private Button CompressButton;
         private Button OutputBrowseButton;
         private Label InputLabel;
         private Label OutputLabel;
-        private Label ResolutionLabel;
         private Label QualityLabel;
         private FolderBrowserDialog InputBrowseDialog;
+        private GroupBox ResolutionGroupBox;
+        private TextBox ResolutionDimensionTextBox;
+        private RadioButton ResolutionDimensionRadioButton;
+        private RadioButton ResolutionPercentRadioButton;
         private FolderBrowserDialog OutputBrowseDialog;
-        private EncoderParameters mEncoderParameters;
         #endregion
     }
 }
