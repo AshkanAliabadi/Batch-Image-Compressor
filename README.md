@@ -3,6 +3,4 @@ A minimalistic tool to compress JPEG images in batches.  Supports compression to
 Requirements:
 .NET Framework 4.5.1 Redistributable:
 
-Web Installer: http://www.microsoft.com/en-us/download/confirmation.aspx?id=40773
-
-Offline Installer: http://www.microsoft.com/en-us/download/details.aspx?id=40779
+Web Installer: http://www.microsoft.com/en-us/download/details.aspx?id=40773
