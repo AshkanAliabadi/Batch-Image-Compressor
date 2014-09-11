@@ -409,8 +409,8 @@ namespace BatchJPEGCompressor
                             GraphicsUnit.Pixel
                         );
 
-                        string dateTime = Encoding.UTF8.GetString( inImage.GetPropertyItem( 0x0132 ).Value );
-                        string filename = RemoveInvalidCharacters( dateTime.Replace( ':', '-' ) ) + extension;
+                        string dateTime = Encoding.UTF8.GetString( inImage.GetPropertyItem( 0x9003 ).Value );
+                        string filename = RemoveInvalidCharacters( dateTime.Replace( ':', '-' ) ).Replace( ' ', '_' ) + extension;
                         outImage.Save( Path.Combine( outputDirectory, filename ), imageCodecInfo, encoderParameters );
                     }
                 }
