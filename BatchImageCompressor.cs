@@ -59,14 +59,15 @@ namespace BatchImageCompressor
             this.mInputTextBox.Name = "mInputTextBox";
             this.mInputTextBox.ReadOnly = true;
             this.mInputTextBox.Size = new System.Drawing.Size( 296, 20 );
-            this.mInputTextBox.TabIndex = 1;
+            this.mInputTextBox.TabIndex = 0;
+            this.mInputTextBox.TabStop = false;
             // 
             // mInputBrowseButton
             // 
             this.mInputBrowseButton.Location = new System.Drawing.Point( 362, 4 );
             this.mInputBrowseButton.Name = "mInputBrowseButton";
             this.mInputBrowseButton.Size = new System.Drawing.Size( 75, 23 );
-            this.mInputBrowseButton.TabIndex = 2;
+            this.mInputBrowseButton.TabIndex = 1;
             this.mInputBrowseButton.Text = "Browse";
             this.mInputBrowseButton.UseVisualStyleBackColor = true;
             this.mInputBrowseButton.Click += new System.EventHandler( this.InputBrowseButton_Click );
@@ -86,14 +87,15 @@ namespace BatchImageCompressor
             this.mOutputTextBox.Name = "mOutputTextBox";
             this.mOutputTextBox.ReadOnly = true;
             this.mOutputTextBox.Size = new System.Drawing.Size( 296, 20 );
-            this.mOutputTextBox.TabIndex = 3;
+            this.mOutputTextBox.TabIndex = 0;
+            this.mOutputTextBox.TabStop = false;
             // 
             // mOutputBrowseButton
             // 
             this.mOutputBrowseButton.Location = new System.Drawing.Point( 362, 30 );
             this.mOutputBrowseButton.Name = "mOutputBrowseButton";
             this.mOutputBrowseButton.Size = new System.Drawing.Size( 75, 23 );
-            this.mOutputBrowseButton.TabIndex = 4;
+            this.mOutputBrowseButton.TabIndex = 2;
             this.mOutputBrowseButton.Text = "Browse";
             this.mOutputBrowseButton.UseVisualStyleBackColor = true;
             this.mOutputBrowseButton.Click += new System.EventHandler( this.OutputBrowseButton_Click );
@@ -138,7 +140,7 @@ namespace BatchImageCompressor
             this.mResolutionPercentRadioButton.Location = new System.Drawing.Point( 11, 47 );
             this.mResolutionPercentRadioButton.Name = "mResolutionPercentRadioButton";
             this.mResolutionPercentRadioButton.Size = new System.Drawing.Size( 65, 17 );
-            this.mResolutionPercentRadioButton.TabIndex = 1;
+            this.mResolutionPercentRadioButton.TabIndex = 3;
             this.mResolutionPercentRadioButton.Text = "Percent:";
             this.mResolutionPercentRadioButton.UseVisualStyleBackColor = true;
             this.mResolutionPercentRadioButton.CheckedChanged += new System.EventHandler( this.ResolutionPercentRadioButton_CheckedChanged );
@@ -150,7 +152,7 @@ namespace BatchImageCompressor
             this.mResolutionPercentTextBox.MaxLength = 3;
             this.mResolutionPercentTextBox.Name = "mResolutionPercentTextBox";
             this.mResolutionPercentTextBox.Size = new System.Drawing.Size( 70, 20 );
-            this.mResolutionPercentTextBox.TabIndex = 2;
+            this.mResolutionPercentTextBox.TabIndex = 5;
             // 
             // mQualityLabel
             // 
@@ -183,9 +185,9 @@ namespace BatchImageCompressor
             // 
             this.mBackgroundWorker.WorkerReportsProgress = true;
             this.mBackgroundWorker.WorkerSupportsCancellation = true;
-            this.mBackgroundWorker.DoWork += new DoWorkEventHandler( this.mBackgroundWorker_DoWork );
-            this.mBackgroundWorker.ProgressChanged += new ProgressChangedEventHandler( this.mBackgroundWorker_ProgressChanged );
-            this.mBackgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler( this.mBackgroundWorker_RunWorkerCompleted );
+            this.mBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler( this.mBackgroundWorker_DoWork );
+            this.mBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler( this.mBackgroundWorker_ProgressChanged );
+            this.mBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler( this.mBackgroundWorker_RunWorkerCompleted );
             // 
             // BatchImageCompressor
             // 
@@ -205,6 +207,7 @@ namespace BatchImageCompressor
             this.Name = "BatchImageCompressor";
             this.Text = "Batch Image Compressor";
             this.Load += new System.EventHandler( this.BatchImageCompressorForm_Load );
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler( this.BatchImageCompressorForm_Closing );
             this.mResolutionGroupBox.ResumeLayout( false );
             this.mResolutionGroupBox.PerformLayout();
             this.ResumeLayout( false );
@@ -217,6 +220,16 @@ namespace BatchImageCompressor
             mResolutionDimensionTextBox.Text = mDefaultResolutionDimension.ToString();
             mResolutionPercentTextBox.Text = mDefaultResolutionPercent.ToString();
             mQualityTextBox.Text = mDefaultQuality.ToString();
+
+            this.CenterToParent();
+        }
+
+        private void BatchImageCompressorForm_Closing( object sender, FormClosingEventArgs e )
+        {
+            if ( mBackgroundWorker.IsBusy && !PromptCancel() )
+            {
+                e.Cancel = true;
+            }
         }
 
         private void InputBrowseButton_Click( object sender, EventArgs e )
@@ -251,18 +264,17 @@ namespace BatchImageCompressor
         {
             if ( mBackgroundWorker.IsBusy )
             {
-                mBackgroundWorker.CancelAsync();
-                mCompressButton.Text = "Compress";
+                PromptCancel();
             }
             else
             {
-                String parameterValidationResult = ValidateUserInput();
-                if ( !String.IsNullOrEmpty( parameterValidationResult ) )
+                String validationResult = ValidateUserInput();
+                if ( !String.IsNullOrEmpty( validationResult ) )
                 {
                     MessageBox.Show(
                         this,
-                        parameterValidationResult,
-                        "Batch Image Compressor",
+                        validationResult,
+                        msTitleBarText,
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error
                     );
@@ -277,8 +289,6 @@ namespace BatchImageCompressor
 
         private void mBackgroundWorker_DoWork( object sender, DoWorkEventArgs e )
         {
-            GC.Collect();
-
             Compress( mInputTextBox.Text, mOutputTextBox.Text );
 
             if ( mBackgroundWorker.CancellationPending )
@@ -289,7 +299,7 @@ namespace BatchImageCompressor
 
         private void mBackgroundWorker_ProgressChanged( object sender, ProgressChangedEventArgs e )
         {
-            mCompressButton.Text = ( e.ProgressPercentage.ToString() + "%" );
+            this.Text = msTitleBarText + " - " + ( e.ProgressPercentage.ToString() + "%" );
         }
 
         private void mBackgroundWorker_RunWorkerCompleted( object sender, RunWorkerCompletedEventArgs e )
@@ -316,11 +326,12 @@ namespace BatchImageCompressor
             MessageBox.Show(
                 this,
                 message,
-                "Batch Image Compressor",
+                msTitleBarText,
                 MessageBoxButtons.OK,
                 icon
             );
 
+            this.Text = msTitleBarText;
             mCompressButton.Text = "Compress";
         }
 
@@ -392,7 +403,7 @@ namespace BatchImageCompressor
 
         private void Compress( string inputDirectory, string outputDirectory )
         {
-            mImageCount = Directory.GetFiles( inputDirectory, "*.jpg", SearchOption.AllDirectories ).Length;
+            GetImageCount( inputDirectory, ref mImageCount );
             mCompressedCount = 0;
 
             using ( EncoderParameters encoderParameters = new EncoderParameters() )
@@ -421,7 +432,7 @@ namespace BatchImageCompressor
                     {
                         loop.Stop();
                     }
-                    
+
                     if ( CanCompress( file ) )
                     {
                         using ( Image image = Image.FromFile( file ) )
@@ -485,18 +496,12 @@ namespace BatchImageCompressor
                     );
 
                     bitmap.Save(
-                        Path.Combine( outputDirectory, GetFilename( image ) ),
-                        imageCodecInfo,
+                        Path.Combine( outputDirectory, GetImageName( image ) ),
+                        msImageCodecInfo,
                         encoderParameters
                     );
                 }
             }
-        }
-
-        private bool CanCompress(string file)
-        {
-            String extension = Path.GetExtension( file ).ToLower();
-            return !String.IsNullOrEmpty( extension ) && extension.Equals( ".jpg" );
         }
 
         private void AdjustResolution( ref int width, ref int height )
@@ -532,7 +537,59 @@ namespace BatchImageCompressor
             }
         }
 
-        private static string GetFilename( Image image )
+        private bool PromptCancel()
+        {
+            DialogResult cancel = MessageBox.Show(
+                this,
+                "Are you sure you want to cancel?",
+                msTitleBarText,
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning
+            );
+
+            bool shouldCancel = ( cancel == DialogResult.Yes );
+            if ( shouldCancel )
+            {
+                mBackgroundWorker.CancelAsync();
+                mCompressButton.Text = "Compress";
+            }
+
+            return shouldCancel;
+        }
+
+        private static bool CanCompress( string file )
+        {
+            String extension = Path.GetExtension( file ).ToLower();
+            return !String.IsNullOrEmpty( extension ) &&
+                (
+                    extension.Equals( ".jpg" ) ||
+                    extension.Equals( ".jpeg" ) ||
+                    extension.Equals( ".bmp" ) ||
+                    extension.Equals( ".png" ) ||
+                    extension.Equals( ".gif" ) ||
+                    extension.Equals( ".tiff" )
+                );
+        }
+
+        private static void GetImageCount( string inputDirectory, ref int count )
+        {
+            string[] files = Directory.GetFiles( inputDirectory );
+            foreach ( string file in files )
+            {
+                if ( CanCompress( file ) )
+                {
+                    ++count;
+                }
+            }
+
+            string[] directories = Directory.GetDirectories( inputDirectory );
+            foreach ( string directory in directories )
+            {
+                GetImageCount( directory, ref count );
+            }
+        }
+
+        private static string GetImageName( Image image )
         {
             string dateTime = Encoding.UTF8.GetString( GetDateTime( image ).Value );
             return ParseDateTime( dateTime ).ToString( "yyyy-MM-dd_HH-mm-ss" ) + ".jpg";
@@ -598,7 +655,8 @@ namespace BatchImageCompressor
         #endregion
 
         #region Private Members
-        private static readonly ImageCodecInfo imageCodecInfo = GetEncoderInfo( ImageFormat.Jpeg );
+        private static readonly string msTitleBarText = "Batch Image Compressor";
+        private static readonly ImageCodecInfo msImageCodecInfo = GetEncoderInfo( ImageFormat.Jpeg );
         private static readonly int[] msTags = new int[] { 0x9003, 0x0132 };
         private static readonly string[] msFormats = new string[] { "yyyy':'MM':'dd HH':'mm':'ss\0" };
         private const int mDefaultResolutionDimension = 1400;
