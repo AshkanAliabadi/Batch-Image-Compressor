@@ -212,7 +212,6 @@ namespace BatchImageCompressor
             this.mResolutionGroupBox.PerformLayout();
             this.ResumeLayout( false );
             this.PerformLayout();
-
         }
 
         private void BatchImageCompressorForm_Load( object sender, EventArgs e )
@@ -220,6 +219,9 @@ namespace BatchImageCompressor
             mResolutionDimensionTextBox.Text = mDefaultResolutionDimension.ToString();
             mResolutionPercentTextBox.Text = mDefaultResolutionPercent.ToString();
             mQualityTextBox.Text = mDefaultQuality.ToString();
+
+            mParallelOptions = new ParallelOptions();
+            mParallelOptions.MaxDegreeOfParallelism = Environment.ProcessorCount;
 
             this.CenterToParent();
         }
@@ -426,6 +428,7 @@ namespace BatchImageCompressor
             string[] files = Directory.GetFiles( inputDirectory );
             Parallel.ForEach(
                 files,
+                mParallelOptions,
                 ( file, loop ) =>
                 {
                     if ( mBackgroundWorker.CancellationPending )
@@ -659,9 +662,11 @@ namespace BatchImageCompressor
         private static readonly ImageCodecInfo msImageCodecInfo = GetEncoderInfo( ImageFormat.Jpeg );
         private static readonly int[] msTags = new int[] { 0x9003, 0x0132 };
         private static readonly string[] msFormats = new string[] { "yyyy':'MM':'dd HH':'mm':'ss\0" };
+
         private const int mDefaultResolutionDimension = 1400;
         private const int mDefaultResolutionPercent = 65;
         private const int mDefaultQuality = 85;
+
         private Label mInputLabel;
         private TextBox mInputTextBox;
         private Button mInputBrowseButton;
@@ -679,6 +684,8 @@ namespace BatchImageCompressor
         private TextBox mQualityTextBox;
         private Button mCompressButton;
         private BackgroundWorker mBackgroundWorker;
+
+        private ParallelOptions mParallelOptions;
         private int mImageCount;
         private int mCompressedCount;
 
