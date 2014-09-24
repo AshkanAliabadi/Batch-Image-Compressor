@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace BatchJPEGCompressor
+namespace BatchImageCompressor
 {
     static class Program
     {
@@ -16,7 +16,7 @@ namespace BatchJPEGCompressor
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault( false );
-            Application.Run( new BatchJPEGCompressor() );
+            Application.Run( new BatchImageCompressor() );
         }
     }
 }
