@@ -27,11 +27,15 @@ namespace BatchImageCompressor
             this.mInputLabel = new System.Windows.Forms.Label();
             this.mInputTextBox = new System.Windows.Forms.TextBox();
             this.mInputBrowseButton = new System.Windows.Forms.Button();
-            this.InputBrowseDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.mInputBrowseDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.mOutputLabel = new System.Windows.Forms.Label();
             this.mOutputTextBox = new System.Windows.Forms.TextBox();
             this.mOutputBrowseButton = new System.Windows.Forms.Button();
-            this.OutputBrowseDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.mOutputBrowseDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.mProblematicLabel = new System.Windows.Forms.Label();
+            this.mProblematicTextBox = new System.Windows.Forms.TextBox();
+            this.mProblematicBrowseButton = new System.Windows.Forms.Button();
+            this.mProblematicBrowseDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.mResolutionGroupBox = new System.Windows.Forms.GroupBox();
             this.mResolutionDimensionTextBox = new System.Windows.Forms.TextBox();
             this.mResolutionDimensionRadioButton = new System.Windows.Forms.RadioButton();
@@ -47,7 +51,7 @@ namespace BatchImageCompressor
             // mInputLabel
             // 
             this.mInputLabel.AutoSize = true;
-            this.mInputLabel.Location = new System.Drawing.Point( 20, 9 );
+            this.mInputLabel.Location = new System.Drawing.Point( 34, 10 );
             this.mInputLabel.Name = "mInputLabel";
             this.mInputLabel.Size = new System.Drawing.Size( 34, 13 );
             this.mInputLabel.TabIndex = 0;
@@ -55,7 +59,7 @@ namespace BatchImageCompressor
             // 
             // mInputTextBox
             // 
-            this.mInputTextBox.Location = new System.Drawing.Point( 60, 6 );
+            this.mInputTextBox.Location = new System.Drawing.Point( 74, 7 );
             this.mInputTextBox.Name = "mInputTextBox";
             this.mInputTextBox.ReadOnly = true;
             this.mInputTextBox.Size = new System.Drawing.Size( 296, 20 );
@@ -64,7 +68,7 @@ namespace BatchImageCompressor
             // 
             // mInputBrowseButton
             // 
-            this.mInputBrowseButton.Location = new System.Drawing.Point( 362, 4 );
+            this.mInputBrowseButton.Location = new System.Drawing.Point( 376, 4 );
             this.mInputBrowseButton.Name = "mInputBrowseButton";
             this.mInputBrowseButton.Size = new System.Drawing.Size( 75, 23 );
             this.mInputBrowseButton.TabIndex = 1;
@@ -75,7 +79,7 @@ namespace BatchImageCompressor
             // mOutputLabel
             // 
             this.mOutputLabel.AutoSize = true;
-            this.mOutputLabel.Location = new System.Drawing.Point( 12, 35 );
+            this.mOutputLabel.Location = new System.Drawing.Point( 26, 37 );
             this.mOutputLabel.Name = "mOutputLabel";
             this.mOutputLabel.Size = new System.Drawing.Size( 42, 13 );
             this.mOutputLabel.TabIndex = 0;
@@ -83,7 +87,7 @@ namespace BatchImageCompressor
             // 
             // mOutputTextBox
             // 
-            this.mOutputTextBox.Location = new System.Drawing.Point( 60, 32 );
+            this.mOutputTextBox.Location = new System.Drawing.Point( 74, 34 );
             this.mOutputTextBox.Name = "mOutputTextBox";
             this.mOutputTextBox.ReadOnly = true;
             this.mOutputTextBox.Size = new System.Drawing.Size( 296, 20 );
@@ -92,7 +96,7 @@ namespace BatchImageCompressor
             // 
             // mOutputBrowseButton
             // 
-            this.mOutputBrowseButton.Location = new System.Drawing.Point( 362, 30 );
+            this.mOutputBrowseButton.Location = new System.Drawing.Point( 376, 31 );
             this.mOutputBrowseButton.Name = "mOutputBrowseButton";
             this.mOutputBrowseButton.Size = new System.Drawing.Size( 75, 23 );
             this.mOutputBrowseButton.TabIndex = 2;
@@ -100,13 +104,41 @@ namespace BatchImageCompressor
             this.mOutputBrowseButton.UseVisualStyleBackColor = true;
             this.mOutputBrowseButton.Click += new System.EventHandler( this.OutputBrowseButton_Click );
             // 
+            // mProblematicLabel
+            // 
+            this.mProblematicLabel.AutoSize = true;
+            this.mProblematicLabel.Location = new System.Drawing.Point( 3, 63 );
+            this.mProblematicLabel.Name = "mProblematicLabel";
+            this.mProblematicLabel.Size = new System.Drawing.Size( 65, 13 );
+            this.mProblematicLabel.TabIndex = 0;
+            this.mProblematicLabel.Text = "Problematic:";
+            // 
+            // mProblematicTextBox
+            // 
+            this.mProblematicTextBox.Location = new System.Drawing.Point( 74, 60 );
+            this.mProblematicTextBox.Name = "mProblematicTextBox";
+            this.mProblematicTextBox.ReadOnly = true;
+            this.mProblematicTextBox.Size = new System.Drawing.Size( 296, 20 );
+            this.mProblematicTextBox.TabIndex = 0;
+            this.mProblematicTextBox.TabStop = false;
+            // 
+            // mProblematicBrowseButton
+            // 
+            this.mProblematicBrowseButton.Location = new System.Drawing.Point( 376, 57 );
+            this.mProblematicBrowseButton.Name = "mProblematicBrowseButton";
+            this.mProblematicBrowseButton.Size = new System.Drawing.Size( 75, 23 );
+            this.mProblematicBrowseButton.TabIndex = 3;
+            this.mProblematicBrowseButton.Text = "Browse";
+            this.mProblematicBrowseButton.UseVisualStyleBackColor = true;
+            this.mProblematicBrowseButton.Click += new System.EventHandler( this.mProblematicBrowseButton_Click );
+            // 
             // mResolutionGroupBox
             // 
             this.mResolutionGroupBox.Controls.Add( this.mResolutionDimensionTextBox );
             this.mResolutionGroupBox.Controls.Add( this.mResolutionDimensionRadioButton );
             this.mResolutionGroupBox.Controls.Add( this.mResolutionPercentRadioButton );
             this.mResolutionGroupBox.Controls.Add( this.mResolutionPercentTextBox );
-            this.mResolutionGroupBox.Location = new System.Drawing.Point( 60, 58 );
+            this.mResolutionGroupBox.Location = new System.Drawing.Point( 74, 86 );
             this.mResolutionGroupBox.Name = "mResolutionGroupBox";
             this.mResolutionGroupBox.Size = new System.Drawing.Size( 170, 72 );
             this.mResolutionGroupBox.TabIndex = 5;
@@ -119,7 +151,7 @@ namespace BatchImageCompressor
             this.mResolutionDimensionTextBox.MaxLength = 4;
             this.mResolutionDimensionTextBox.Name = "mResolutionDimensionTextBox";
             this.mResolutionDimensionTextBox.Size = new System.Drawing.Size( 70, 20 );
-            this.mResolutionDimensionTextBox.TabIndex = 4;
+            this.mResolutionDimensionTextBox.TabIndex = 5;
             // 
             // mResolutionDimensionRadioButton
             // 
@@ -128,7 +160,7 @@ namespace BatchImageCompressor
             this.mResolutionDimensionRadioButton.Location = new System.Drawing.Point( 11, 19 );
             this.mResolutionDimensionRadioButton.Name = "mResolutionDimensionRadioButton";
             this.mResolutionDimensionRadioButton.Size = new System.Drawing.Size( 77, 17 );
-            this.mResolutionDimensionRadioButton.TabIndex = 3;
+            this.mResolutionDimensionRadioButton.TabIndex = 4;
             this.mResolutionDimensionRadioButton.TabStop = true;
             this.mResolutionDimensionRadioButton.Text = "Dimension:";
             this.mResolutionDimensionRadioButton.UseVisualStyleBackColor = true;
@@ -152,12 +184,12 @@ namespace BatchImageCompressor
             this.mResolutionPercentTextBox.MaxLength = 3;
             this.mResolutionPercentTextBox.Name = "mResolutionPercentTextBox";
             this.mResolutionPercentTextBox.Size = new System.Drawing.Size( 70, 20 );
-            this.mResolutionPercentTextBox.TabIndex = 5;
+            this.mResolutionPercentTextBox.TabIndex = 6;
             // 
             // mQualityLabel
             // 
             this.mQualityLabel.AutoSize = true;
-            this.mQualityLabel.Location = new System.Drawing.Point( 238, 79 );
+            this.mQualityLabel.Location = new System.Drawing.Point( 252, 106 );
             this.mQualityLabel.Name = "mQualityLabel";
             this.mQualityLabel.Size = new System.Drawing.Size( 42, 13 );
             this.mQualityLabel.TabIndex = 0;
@@ -165,18 +197,18 @@ namespace BatchImageCompressor
             // 
             // mQualityTextBox
             // 
-            this.mQualityTextBox.Location = new System.Drawing.Point( 286, 76 );
+            this.mQualityTextBox.Location = new System.Drawing.Point( 300, 103 );
             this.mQualityTextBox.MaxLength = 3;
             this.mQualityTextBox.Name = "mQualityTextBox";
             this.mQualityTextBox.Size = new System.Drawing.Size( 70, 20 );
-            this.mQualityTextBox.TabIndex = 6;
+            this.mQualityTextBox.TabIndex = 7;
             // 
             // mCompressButton
             // 
-            this.mCompressButton.Location = new System.Drawing.Point( 12, 140 );
+            this.mCompressButton.Location = new System.Drawing.Point( 8, 164 );
             this.mCompressButton.Name = "mCompressButton";
-            this.mCompressButton.Size = new System.Drawing.Size( 425, 23 );
-            this.mCompressButton.TabIndex = 7;
+            this.mCompressButton.Size = new System.Drawing.Size( 441, 23 );
+            this.mCompressButton.TabIndex = 8;
             this.mCompressButton.Text = "Compress";
             this.mCompressButton.UseVisualStyleBackColor = true;
             this.mCompressButton.Click += new System.EventHandler( this.CompressButton_Click );
@@ -191,7 +223,10 @@ namespace BatchImageCompressor
             // 
             // BatchImageCompressor
             // 
-            this.ClientSize = new System.Drawing.Size( 449, 175 );
+            this.ClientSize = new System.Drawing.Size( 461, 194 );
+            this.Controls.Add( this.mProblematicBrowseButton );
+            this.Controls.Add( this.mProblematicLabel );
+            this.Controls.Add( this.mProblematicTextBox );
             this.Controls.Add( this.mInputLabel );
             this.Controls.Add( this.mInputTextBox );
             this.Controls.Add( this.mInputBrowseButton );
@@ -206,12 +241,13 @@ namespace BatchImageCompressor
             this.MaximizeBox = false;
             this.Name = "BatchImageCompressor";
             this.Text = "Batch Image Compressor";
-            this.Load += new System.EventHandler( this.BatchImageCompressorForm_Load );
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler( this.BatchImageCompressorForm_Closing );
+            this.Load += new System.EventHandler( this.BatchImageCompressorForm_Load );
             this.mResolutionGroupBox.ResumeLayout( false );
             this.mResolutionGroupBox.PerformLayout();
             this.ResumeLayout( false );
             this.PerformLayout();
+
         }
 
         private void BatchImageCompressorForm_Load( object sender, EventArgs e )
@@ -236,17 +272,25 @@ namespace BatchImageCompressor
 
         private void InputBrowseButton_Click( object sender, EventArgs e )
         {
-            if ( InputBrowseDialog.ShowDialog() == DialogResult.OK )
+            if ( mInputBrowseDialog.ShowDialog() == DialogResult.OK )
             {
-                mInputTextBox.Text = InputBrowseDialog.SelectedPath;
+                mInputTextBox.Text = mInputBrowseDialog.SelectedPath;
             }
         }
 
         private void OutputBrowseButton_Click( object sender, EventArgs e )
         {
-            if ( OutputBrowseDialog.ShowDialog() == DialogResult.OK )
+            if ( mOutputBrowseDialog.ShowDialog() == DialogResult.OK )
             {
-                mOutputTextBox.Text = OutputBrowseDialog.SelectedPath;
+                mOutputTextBox.Text = mOutputBrowseDialog.SelectedPath;
+            }
+        }
+
+        private void mProblematicBrowseButton_Click( object sender, EventArgs e )
+        {
+            if ( mProblematicBrowseDialog.ShowDialog() == DialogResult.OK )
+            {
+                mProblematicTextBox.Text = mProblematicBrowseDialog.SelectedPath;
             }
         }
 
@@ -291,6 +335,8 @@ namespace BatchImageCompressor
 
         private void mBackgroundWorker_DoWork( object sender, DoWorkEventArgs e )
         {
+            ResetStatistics( mInputTextBox.Text );
+
             Compress( mInputTextBox.Text, mOutputTextBox.Text );
 
             if ( mBackgroundWorker.CancellationPending )
@@ -341,17 +387,28 @@ namespace BatchImageCompressor
         {
             if ( String.IsNullOrEmpty( mInputTextBox.Text ) )
             {
-                return "Invalid input directory!";
+                return "The input directory cannot be empty! Please choose a valid directory whose images you want compressed.";
             }
 
             if ( String.IsNullOrEmpty( mOutputTextBox.Text ) )
             {
-                return "Invalid output directory!";
+                return "The output directory cannot be empty! Please choose a valid directory to where you want compressed images stored.";
+            }
+
+            if ( String.IsNullOrEmpty( mProblematicTextBox.Text ) )
+            {
+                return "The problematic directory cannot be empty! Please choose a valid directory to copy all the problematic images to. " +
+                       "The images are considered problematic if the Batch Image Compressor fails to compress them for whatever reason.";
             }
 
             if ( Directory.EnumerateFileSystemEntries( mOutputTextBox.Text ).GetEnumerator().MoveNext() )
             {
-                return "To avoid overriding existing files, output directory is required to be empty.";
+                return "To avoid overriding existing files, the output directory is required to be empty.";
+            }
+
+            if ( Directory.EnumerateFileSystemEntries( mProblematicTextBox.Text ).GetEnumerator().MoveNext() )
+            {
+                return "To avoid overriding existing files, the problematic directory is required to be empty.";
             }
 
             string invalidResolutionMessage = null;
@@ -362,7 +419,7 @@ namespace BatchImageCompressor
                     int resolution = System.Convert.ToInt32( mResolutionDimensionTextBox.Text );
                     if ( resolution < 1 || resolution > 9999 )
                     {
-                        invalidResolutionMessage = "Resolution dimension must be an integer in the range [1, 9999]";
+                        invalidResolutionMessage = "Resolution dimension must be an integer in the range [1, 9999].";
                     }
                 }
 
@@ -371,7 +428,7 @@ namespace BatchImageCompressor
                     int resolution = System.Convert.ToInt32( mResolutionPercentTextBox.Text );
                     if ( resolution < 1 || resolution > 100 )
                     {
-                        invalidResolutionMessage = "Resolution percentage must be an integer in the range [1, 100]";
+                        invalidResolutionMessage = "Resolution percentage must be an integer in the range [1, 100].";
                     }
                 }
             }
@@ -403,11 +460,21 @@ namespace BatchImageCompressor
             return null;
         }
 
-        private void Compress( string inputDirectory, string outputDirectory )
+        private void ResetStatistics( string inputDirectory )
         {
             GetImageCount( inputDirectory, ref mImageCount );
             mCompressedCount = 0;
+        }
 
+        private void UpdateStatistics()
+        {
+            Interlocked.Add( ref mCompressedCount, 100 );
+            /* 32-bit read is atomic in .NET's memory model. */
+            mBackgroundWorker.ReportProgress( mCompressedCount / mImageCount );
+        }
+
+        private void Compress( string inputDirectory, string outputDirectory )
+        {
             using ( EncoderParameters encoderParameters = new EncoderParameters() )
             {
                 System.Drawing.Imaging.Encoder encoder = System.Drawing.Imaging.Encoder.Quality;
@@ -425,9 +492,8 @@ namespace BatchImageCompressor
                 return;
             }
 
-            string[] files = Directory.GetFiles( inputDirectory );
             Parallel.ForEach(
-                files,
+                Directory.GetFiles( inputDirectory ),
                 mParallelOptions,
                 ( file, loop ) =>
                 {
@@ -440,15 +506,24 @@ namespace BatchImageCompressor
                     {
                         using ( Image image = Image.FromFile( file ) )
                         {
-                            Compress( image, outputDirectory, encoderParameters );
-
-                            Interlocked.Add( ref mCompressedCount, 100 );
-                            /* 32-bit read is atomic in .NET's memory model. */
-                            mBackgroundWorker.ReportProgress( mCompressedCount / mImageCount );
+                            try
+                            {
+                                Compress( image, outputDirectory, encoderParameters );
+                                UpdateStatistics();
+                            }
+                            catch ( Exception )
+                            {
+                                File.Copy( file, Path.Combine( mProblematicTextBox.Text, Path.GetFileName( file ) ) );
+                            }
                         }
                     }
                 }
             );
+
+            if ( mBackgroundWorker.CancellationPending )
+            {
+                return;
+            }
 
             string[] directories = Directory.GetDirectories( inputDirectory );
             foreach ( string directory in directories )
@@ -542,7 +617,7 @@ namespace BatchImageCompressor
 
         private bool PromptCancel()
         {
-            DialogResult cancel = MessageBox.Show(
+            DialogResult cancelDialogResult = MessageBox.Show(
                 this,
                 "Are you sure you want to cancel?",
                 msTitleBarText,
@@ -550,7 +625,7 @@ namespace BatchImageCompressor
                 MessageBoxIcon.Warning
             );
 
-            bool shouldCancel = ( cancel == DialogResult.Yes );
+            bool shouldCancel = ( cancelDialogResult == DialogResult.Yes );
             if ( shouldCancel )
             {
                 mBackgroundWorker.CancelAsync();
@@ -670,11 +745,15 @@ namespace BatchImageCompressor
         private Label mInputLabel;
         private TextBox mInputTextBox;
         private Button mInputBrowseButton;
-        private FolderBrowserDialog InputBrowseDialog;
+        private FolderBrowserDialog mInputBrowseDialog;
         private Label mOutputLabel;
         private TextBox mOutputTextBox;
         private Button mOutputBrowseButton;
-        private FolderBrowserDialog OutputBrowseDialog;
+        private FolderBrowserDialog mOutputBrowseDialog;
+        private Label mProblematicLabel;
+        private TextBox mProblematicTextBox;
+        private Button mProblematicBrowseButton;
+        private FolderBrowserDialog mProblematicBrowseDialog;
         private GroupBox mResolutionGroupBox;
         private RadioButton mResolutionDimensionRadioButton;
         private TextBox mResolutionDimensionTextBox;
